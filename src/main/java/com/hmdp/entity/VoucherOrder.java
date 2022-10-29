@@ -8,15 +8,10 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 /**
- * <p>
- * 
- * </p>
- *
- * @author 虎哥
- * @since 2021-12-22
+ * 优惠卷的订单表
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -55,27 +50,26 @@ public class VoucherOrder implements Serializable {
     /**
      * 下单时间
      */
-    private LocalDateTime createTime;
+    private Date createTime;
 
     /**
      * 支付时间
      */
-    private LocalDateTime payTime;
+    private Date payTime;
 
     /**
      * 核销时间
      */
-    private LocalDateTime useTime;
+    private Date useTime;
 
     /**
      * 退款时间
      */
-    private LocalDateTime refundTime;
+    private Date refundTime;
 
     /**
      * 更新时间
      */
-    private LocalDateTime updateTime;
-
+    private Date updateTime;
 
 }

@@ -48,18 +48,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public Result sendCode(String phone, HttpSession session) {
 
-        //  判断用户提交的手机号是否正确
+        // 1. 判断用户提交的手机号是否正确
         boolean codeInvalid = RegexUtils.isPhoneInvalid(phone);
 
-        //  手机号不合法，退出方法，返回错误信息
-        if(codeInvalid){//手机号格式匹配返回false
+        // 手机号不合法，退出方法，返回错误信息
+        if (codeInvalid) {//手机号格式匹配返回false
             return Result.fail("手机号格式有误");
         }
-        //  手机号验证通过：生成验证码；并发送验证码（log日志模拟）；保存到session--------已用redis替代session共享信息   // session.setAttribute("code",code);
-
+        // 2.手机号验证通过：生成验证码；并发送验证码（log日志模拟）；
+        //  保存到session--------已用redis替代session共享信息
+        // session.setAttribute("code",code);
         String code = RandomUtil.randomNumbers(8);
 
-        stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY+ phone,code,LOGIN_CODE_TTL, TimeUnit.MINUTES);
+        stringRedisTemplate.opsForValue().set(LOGIN_CODE_KEY + phone, code, LOGIN_CODE_TTL, TimeUnit.MINUTES);
 
         log.debug(code);
 
@@ -73,18 +74,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
          因为保不齐客户在接受短信验证码这段时间修改手机号
          */
         String phone = loginForm.getPhone();
-        if (RegexUtils.isPhoneInvalid(phone)){
+        if (RegexUtils.isPhoneInvalid(phone)) {
             return Result.fail("手机号格式有误");
         }
 
         //判断验证码是否正确---从Redis中获取，// String code = loginForm.getCode();
 
-        String cacheCode = stringRedisTemplate.opsForValue().get(LOGIN_CODE_KEY+phone);
+        String cacheCode = stringRedisTemplate.opsForValue().get(LOGIN_CODE_KEY + phone);
         //String cacheCode = (String) session.getAttribute("code");
         log.debug(cacheCode);
 
         //如果验证码不匹配
-        if (!cacheCode.equals(cacheCode) || cacheCode == null){
+        if (!cacheCode.equals(cacheCode) || cacheCode == null) {
             return Result.fail("您输入的验证码有误");
         }
         //根据手机号查询用户是否存在
@@ -92,8 +93,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User currentUser = query().eq("phone", loginForm.getPhone().toString()).one();
 
         //如果不存在，就根据phone创建一个
-        if (currentUser == null){
-             currentUser = createUserWithPhone(phone);
+        if (currentUser == null) {
+            currentUser = createUserWithPhone(phone);
         }
         //用户敏感信息处理 ------------------将User类转换为UserDTO
         UserDTO userDTO = BeanUtil.copyProperties(currentUser, UserDTO.class);
@@ -121,7 +122,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
 
     //根据手机号创建用户
-    public User createUserWithPhone(String phone){
+    public User createUserWithPhone(String phone) {
         User user = new User();
         String nickName = RandomUtil.randomString(8);
         user.setPhone(phone);

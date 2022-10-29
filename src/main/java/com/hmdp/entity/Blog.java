@@ -12,12 +12,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * <p>
- * 
- * </p>
- *
- * @author 虎哥
- * @since 2021-12-22
+ * 用户日记表（达人探点）
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
@@ -90,6 +85,4 @@ public class Blog implements Serializable {
      * 更新时间
      */
     private LocalDateTime updateTime;
-
-
 }
