@@ -8,7 +8,7 @@ import org.apache.ibatis.annotations.Lang;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author 虎哥
@@ -16,8 +16,8 @@ import org.apache.ibatis.annotations.Lang;
  */
 public interface IVoucherOrderService extends IService<VoucherOrder> {
 
-    //秒杀优惠卷
-    Result seckillVoucher(Long voucherId);
-    //
-    void createVoucherOrder(VoucherOrder voucherOrder);
+  //秒杀优惠卷
+  Result seckillVoucher(Long voucherId);
+
+  void createVoucherOrder(VoucherOrder voucherOrder);
 }

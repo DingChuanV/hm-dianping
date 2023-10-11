@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * <p>
- *  Mapper 接口
+ * Mapper 接口
  * </p>
  *
  * @author 虎哥
@@ -16,5 +16,5 @@ import java.util.List;
  */
 public interface VoucherMapper extends BaseMapper<Voucher> {
 
-    List<Voucher> queryVoucherOfShop(@Param("shopId") Long shopId);
+  List<Voucher> queryVoucherOfShop(@Param("shopId") Long shopId);
 }

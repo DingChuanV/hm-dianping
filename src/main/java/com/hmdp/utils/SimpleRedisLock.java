@@ -8,55 +8,54 @@ import org.springframework.data.redis.core.script.DefaultRedisScript;
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
-/*
-*
- * @author chenghao
- * @purpose：
- * @备注：
- * @data 2022年08月06日 23:34
 
-*/
+/**
+ * @author dingchuan
+ */
+public class SimpleRedisLock implements ILock {
 
-public class SimpleRedisLock implements ILock{
-    //可用于区分不同业务的前缀
-    private String name;
-    //说明这是一个锁
-    private static final String KEY_PREFIX = "lock";
-    //UUID
-    private static final String ID_PREFIX = UUID.randomUUID().toString(true) + "-";
+  //可用于区分不同业务的前缀
+  private String name;
+  //说明这是一个锁
+  private static final String KEY_PREFIX = "lock";
+  //UUID
+  private static final String ID_PREFIX = UUID.randomUUID().toString(true) + "-";
 
-    private StringRedisTemplate stringRedisTemplate;
+  private StringRedisTemplate stringRedisTemplate;
 
-    private static final DefaultRedisScript<Long> UNLOCK_SCRIPT;
-    static {
-        UNLOCK_SCRIPT = new DefaultRedisScript<>();
-        UNLOCK_SCRIPT.setLocation(new ClassPathResource("unlock.lua"));
-    }
+  private static final DefaultRedisScript<Long> UNLOCK_SCRIPT;
 
-    public SimpleRedisLock(String name,StringRedisTemplate stringRedisTemplate) {
-        this.name = name;
-        this.stringRedisTemplate = stringRedisTemplate;
-    }
+  static {
+    UNLOCK_SCRIPT = new DefaultRedisScript<>();
+    UNLOCK_SCRIPT.setLocation(new ClassPathResource("unlock.lua"));
+  }
 
-    @Override
-    public boolean tryLock(long timeoutSec) {
+  public SimpleRedisLock(String name, StringRedisTemplate stringRedisTemplate) {
+    this.name = name;
+    this.stringRedisTemplate = stringRedisTemplate;
+  }
 
-        //获取线程标识
-        String threadId = ID_PREFIX + Thread.currentThread().getId();
-        //获取锁
-        Boolean success = stringRedisTemplate.opsForValue().setIfAbsent(KEY_PREFIX + name, threadId, timeoutSec, TimeUnit.SECONDS);
+  @Override
+  public boolean tryLock(long timeoutSec) {
 
-        return Boolean.TRUE.equals(success);
+    //获取线程标识
+    String threadId = ID_PREFIX + Thread.currentThread().getId();
+    //获取锁
+    Boolean success = stringRedisTemplate.opsForValue()
+        .setIfAbsent(KEY_PREFIX + name, threadId, timeoutSec, TimeUnit.SECONDS);
 
-    }
+    return Boolean.TRUE.equals(success);
 
-    @Override
-    public void unlock() {
+  }
 
-        stringRedisTemplate.execute(UNLOCK_SCRIPT, Collections.singletonList(KEY_PREFIX + name),ID_PREFIX + Thread.currentThread().getId());
+  @Override
+  public void unlock() {
+
+    stringRedisTemplate.execute(UNLOCK_SCRIPT, Collections.singletonList(KEY_PREFIX + name),
+        ID_PREFIX + Thread.currentThread().getId());
 
 
-    }
+  }
     /*
     @Override
     public void unlock() {

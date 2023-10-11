@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.Lang;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author 虎哥
@@ -15,7 +15,9 @@ import org.apache.ibatis.annotations.Lang;
  */
 public interface IShopService extends IService<Shop> {
 
-    Result queryById(Long id);
-    Result update(Shop shop);
-    Shop queryWithLogicalExpire(Long id);
+  Result queryById(Long id);
+
+  Result update(Shop shop);
+
+  Shop queryWithLogicalExpire(Long id);
 }

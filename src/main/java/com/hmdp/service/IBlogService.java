@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  * <p>
- *  服务类
+ * 服务类
  * </p>
  *
  * @author 虎哥
@@ -19,13 +19,13 @@ import java.util.List;
  */
 public interface IBlogService extends IService<Blog> {
 
-    Result queryBlogbyId(Long id);
-    Result queryHotBlog(Integer current);
+  Result queryBlogbyId(Long id);
 
+  Result queryHotBlog(Integer current);
 
-    Result likeBlog(Long id);
+  Result likeBlog(Long id);
 
-    Result queryBlogLikes(Long id);
+  Result queryBlogLikes(Long id);
 
-    Result queryBlogOfFollow(Long max, Integer offset);
+  Result queryBlogOfFollow(Long max, Integer offset);
 }
