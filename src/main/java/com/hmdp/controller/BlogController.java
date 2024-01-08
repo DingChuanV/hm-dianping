@@ -9,6 +9,7 @@ import com.hmdp.service.IBlogService;
 import com.hmdp.service.IUserService;
 import com.hmdp.utils.SystemConstants;
 import com.hmdp.utils.UserHolder;
+import io.swagger.annotations.Api;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -20,6 +21,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/blog")
+@Api(tags = "博客控制器")
 public class BlogController {
 
   @Resource
@@ -28,6 +30,7 @@ public class BlogController {
   private IUserService userService;
 
   @PostMapping
+
   public Result saveBlog(@RequestBody Blog blog) {
     // 获取登录用户
     UserDTO user = UserHolder.getUser();
